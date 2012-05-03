@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="urn:mozilla:install-manifest"
+                   em:id="oldidentityblockstyle@dagger2-addons.mozilla.org"
+                   em:type="2"
+                   em:version="0.1"
+                   em:name="Old Identity Block Style"
+                   em:description="Restores the old identity block style, including favicon in the address bar."
+                   em:creator="Dagger"
+                   em:bootstrap="true">
+    <em:targetApplication RDF:resource="rdf:#$firefox"/>
+    <em:localized>
+      <RDF:Description em:locale="en-US"
+                       em:name="Old Identity Block Style"
+                       em:description="Restores the old identity block style, including favicon in the address bar."/>
+    </em:localized>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$firefox"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="14.0"
+                   em:maxVersion="15.0a1"/>
+
+</RDF:RDF>

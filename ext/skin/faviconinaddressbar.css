@@ -1,0 +1,78 @@
+#page-proxy-favicon:not([src]) {
+  list-style-image: url("chrome://mozapps/skin/places/defaultFavicon.png") !important;
+  -moz-image-region: auto;
+}
+
+#identity-box:hover > #identity-box-inner > #page-proxy-stack > #page-proxy-favicon:not([src]) {
+  -moz-image-region: auto !important;
+}
+
+#identity-box:hover:active > #identity-box-inner > #page-proxy-stack > #page-proxy-favicon:not([src]),
+#identity-box[open=true] > #identity-box-inner > #page-proxy-stack > #page-proxy-favicon:not([src]) {
+  -moz-image-region: auto !important;
+}
+
+#identity-box {
+  background-image: -moz-linear-gradient(hsl(0,0%,98%), hsl(0,0%,92%));
+  box-shadow: 0 1px 0 hsla(0,0%,0%,.05) inset;
+  -moz-border-end: 1px solid hsla(0,0%,0%,.1);
+}
+
+#identity-box:hover {
+  background-image: -moz-linear-gradient(hsl(0,0%,95%), hsl(0,0%,87%));
+}
+
+#identity-box[open="true"],
+#identity-box:hover:active {
+  background-image: -moz-linear-gradient(hsl(0,0%,92%), hsl(0,0%,82%));
+  box-shadow: 0 1px 1px hsla(0,0%,0%,.3) inset,
+              0 1px 3px hsla(0,0%,0%,.3) inset;
+}
+
+
+
+#identity-box.verifiedDomain {
+  background-image: -moz-linear-gradient(hsl(215,60%,92%), hsl(215,58%,88%));
+  box-shadow: 0 1px 0 hsla(215,54%,33%,.05) inset;
+  -moz-border-end-color: hsla(215,54%,33%,.2);
+  color: hsl(215,54%,33%);
+}
+
+#identity-box.verifiedDomain:hover {
+  background-image: -moz-linear-gradient(hsl(215,85%,85%), hsl(215,70%,68%));
+}
+
+#identity-box.verifiedDomain[open="true"],
+#identity-box.verifiedDomain:hover:active {
+  background-image: -moz-linear-gradient(hsl(215,80%,80%), hsl(215,67%,65%));
+  box-shadow: 0 1px 1px hsla(215,54%,33%,.7) inset,
+              0 1px 3px 1px hsla(215,54%,33%,.5) inset;
+}
+
+#identity-box.verifiedIdentity {
+  background-image: -moz-linear-gradient(hsl(91,70%,90%), hsl(93,60%,81%));
+  box-shadow: 0 1px 0 hsla(92,81%,16%,.05) inset;
+  -moz-border-end-color: hsla(92,81%,16%,.2);
+/*+  background-color: #fff;*/
+  color: hsl(92,100%,20%);
+}
+
+#identity-box.verifiedIdentity:hover {
+  background-image: -moz-linear-gradient(hsl(92,69%,77%), hsl(92,44%,51%));
+}
+
+#identity-box.verifiedIdentity[open="true"],
+#identity-box.verifiedIdentity:hover:active {
+  background-image: -moz-linear-gradient(hsl(92,65%,70%), hsl(92,40%,48%));
+  box-shadow: 0 1px 1px hsla(92,81%,16%,.6) inset,
+              0 1px 3px 1px hsla(92,81%,16%,.5) inset;
+/*+  -moz-border-end: 1px solid hsla(92,81%,16%,.2);*/
+}
+
+/* Mostly fudged to look right in Windows Classic. */
+#identity-box {
+  -moz-margin-end: 3px !important;
+}
+#identity-box.verifiedDomain, #identity-box.verifiedIdentity {
+    padding-right: 0px !important;
+}
