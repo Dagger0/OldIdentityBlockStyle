@@ -109,7 +109,7 @@ function registerStyleSheet() {
 }
 
 /**
- * Handle the add-on being activated on install/enable
+ * Handle the extension being activated on install/enable
  */
 function startup(data, reason) {
   Cu.import("chrome://oldidentityblockstyle/content/watchwindows.jsm");
@@ -119,7 +119,7 @@ function startup(data, reason) {
 }
 
 /**
- * Handle the add-on being deactivated on uninstall/disable
+ * Handle the extension being deactivated on uninstall/disable
  */
 function shutdown(data, reason) {
   // Clean up with unloaders when we're deactivating
@@ -130,11 +130,11 @@ function shutdown(data, reason) {
 }
 
 /**
- * Handle the add-on being installed
+ * Handle the extension being installed
  */
 function install(data, reason) {}
 
 /**
- * Handle the add-on being uninstalled
+ * Handle the extension being uninstalled
  */
 function uninstall(data, reason) {}
