@@ -39,55 +39,52 @@ var EXPORTED_SYMBOLS = ["watchWindows", "unload"];
 Components.utils.import("resource://gre/modules/Services.jsm");
 
 function watchWindows(callback, types) {
-  // This function originally wrapped callback() in a try/catch block
-  // to supress errors, but it's more useful if those errors are
-  // actually reported rather than silently eaten.
   function watcher(window) {
-    // Now that the window has loaded, only handle browser windows
+    // The window has loaded; only handle windowtypes from the whitelist.
     let {documentElement} = window.document;
-    if (types.indexOf(documentElement.getAttribute("windowtype")) != -1)
-    {
-      /* SeaMonkey compatibility: gBrowser is only set when
+    if (types.indexOf(documentElement.getAttribute("windowtype")) != -1) {
+      /* SeaMonkey compatibility hack: gBrowser is only set when
          window.getBrowser() is called for the first time. */
-      if ('getBrowser' in window)
-        window.getBrowser();
-          
+      if ('getBrowser' in window) window.getBrowser();
+
       callback(window);
     }
   }
-  
-  // Wait for the window to finish loading before running the callback
+
+  // Wait for the window to finish loading before running the callback.
   function runOnLoad(window) {
-    // Listen for one load event before checking the window type
+    // Listen for one load event before checking the window type.
     window.addEventListener("load", function runOnce() {
       window.removeEventListener("load", runOnce, false);
       watcher(window);
     }, false);
   }
 
-  // Default list of window types to handle
+  // Default list of window types to handle.
   if (!types) types = ["navigator:browser", "mail:3pane"];
-  
-  // Add functionality to existing windows
+
+  // Add functionality to existing windows.
   let windows = Services.wm.getEnumerator(null);
   while (windows.hasMoreElements()) {
-    // Only run the watcher immediately if the window is completely loaded
+    // Only run the watcher immediately if the window is completely loaded.
     let window = windows.getNext();
     if (window.document.readyState == "complete")
       watcher(window);
-    // Wait for the window to load before continuing
+    // Wait for the window to load before continuing.
     else
       runOnLoad(window);
   }
-  
-  // Watch for new browser windows opening then wait for it to load
+
+  // Watch for new windows. Note that this will not fire
+  // for popup windows in Firefox 16 (see bug 799348).
   function windowWatcher(subject, topic) {
     if (topic == "domwindowopened")
       runOnLoad(subject);
   }
+
   Services.ww.registerNotification(windowWatcher);
-  
-  // Make sure to stop watching for windows if we're unloading
+
+  // Make sure to stop watching for windows if we're unloading.
   unload(function() Services.ww.unregisterNotification(windowWatcher));
 }
 
@@ -107,40 +104,40 @@ function watchWindows(callback, types) {
  * @return [function]: A 0-parameter function that undoes adding the callback.
  */
 function unload(callback, container, callanyway) {
-  // Initialize the array of unloaders on the first usage
+  // Initialize the array of unloaders on the first usage.
   let unloaders = unload.unloaders;
   if (unloaders == null)
     unloaders = unload.unloaders = [];
-  
-  // Calling with no arguments runs all the unloader callbacks
+
+  // Calling with no arguments runs all the unloader callbacks.
   if (callback == null) {
     unloaders.slice().forEach(function(unloader) unloader());
     unloaders.length = 0;
     return;
   }
-  
-  // The callback is bound to the lifetime of the container if we have one
+
+  // The callback is bound to the lifetime of the container if we have one.
   if (container != null) {
     // Remove the unloader when the container unloads
     container.addEventListener("unload", removeUnloader, false);
     
-    // Wrap the callback to additionally remove the unload listener
+    // Wrap the callback to additionally remove the unload listener.
     let origCallback = callback;
     callback = function() {
       container.removeEventListener("unload", removeUnloader, false);
       origCallback();
     }
   }
-  
+
   // This function originally wrapped callback() in a try/catch block
-  // to supress errors, but it's more useful if those errors are
+  // to suppress errors, but it's more useful if those errors are
   // actually reported rather than silently eaten.
   function unloader() {
     callback();
   }
   unloaders.push(unloader);
-  
-  // Provide a way to remove the unloader
+
+  // Provide a way to remove the unloader.
   function removeUnloader() {
     // If callanyway = true, call the unloader before its container
     // goes away, rather than just silently dropping it.
