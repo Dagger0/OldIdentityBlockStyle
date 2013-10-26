@@ -40,48 +40,63 @@ Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 function addHandlers(window) {
-  var listener = {
-    onLinkIconAvailable: function (aBrowser, url) {
-      if (window.gProxyFavIcon)
-        if (window.gBrowser.selectedBrowser == aBrowser && window.gBrowser.userTypedValue === null)
-          PageProxySetIcon(aBrowser.mIconURL);
-    },
-  }
-
-  function PageProxySetIcon(aURL) {
+  function PageProxySetIcon(aURL, aTab) {
     if (!window.gProxyFavIcon)
       return;
-  
-    if (!aURL)
-      PageProxyClearIcon();
-    else if (window.gProxyFavIcon.getAttribute("src") != aURL)
+
+    if (aTab && aTab != window.gBrowser.selectedTab)
+      return;
+
+    // Clear the favicon if the new URI is null, or if pageproxystate == invalid
+    // (which usually means the user has typed into the address bar, so the
+    // address bar no longer reflects the page's identity.)
+    if (!aURL || window.gProxyFavIcon.getAttribute("pageproxystate") == "invalid") {
+      return PageProxyClearIcon();
+    }
+
+    if (window.gProxyFavIcon.getAttribute("src") != aURL) {
       window.gProxyFavIcon.setAttribute("src", aURL);
+    }
   }
 
   function PageProxyClearIcon() {
     window.gProxyFavIcon.removeAttribute("src");
   }
 
-  var SetPageProxyState_hookenabled = true;
-  var orig_SetPageProxyState = window.SetPageProxyState;
-  window.SetPageProxyState = function(aState) {
-    var ret = orig_SetPageProxyState.apply(this, arguments);
-    if (SetPageProxyState_hookenabled) {
-      if (aState == "valid")
-        PageProxySetIcon(window.gBrowser.getIcon());
-      else if (aState == "invalid")
-        PageProxyClearIcon();
-    }
-    return ret;
-  };
+  function onTabSelect(evt) {
+    PageProxySetIcon(window.gBrowser.getIcon(), evt.originalTarget);
+  }
+  window.gBrowser.tabContainer.addEventListener("TabSelect", onTabSelect);
 
-  window.gBrowser.addTabsProgressListener(listener);
+  var hook_setIcon = hook(window.gBrowser, "setIcon", function(aTab, aURI) {
+    if (aTab == window.gBrowser.selectedTab) {
+      PageProxySetIcon(aURI instanceof Ci.nsIURI ? aURI.spec : aURI, aTab);
+    }
+    return hook_setIcon.target.apply(this, arguments);
+  });
+
+  // Change the favicon back to the default when
+  // the user starts typing into the address bar.
+  var hook_SetPageProxyState = hook(window, "SetPageProxyState", function(aState) {
+    var ret = hook_SetPageProxyState.target.apply(this, arguments);
+    // PageProxySetIcon will take care of reverting the icon to the
+    // default favicon, based on the new pageproxystate value.
+    PageProxySetIcon(window.gBrowser.getIcon());
+    return ret;
+  });
+
   unload(function() {
-    SetPageProxyState_hookenabled = false;
-    window.gBrowser.removeTabsProgressListener(listener);
+    window.gBrowser.tabContainer.removeEventListener("TabSelect", onTabSelect);
+    hook_SetPageProxyState.unhook();
+    hook_setIcon.unhook();
     PageProxyClearIcon();
   }, window);
+
+  // Make sure gProxyFavIcon is defined.
+  if (!window.gProxyFavIcon)
+    window.gProxyFavIcon = window.document.getElementById("page-proxy-favicon");
   
+  // Set the favicon on the current tab.
   if (window.gProxyFavIcon)
     if (window.gProxyFavIcon.getAttribute("pageproxystate") == "valid")
       PageProxySetIcon(window.gBrowser.getIcon());
@@ -113,6 +128,7 @@ function registerStyleSheet() {
  */
 function startup(data, reason) {
   Cu.import("chrome://oldidentityblockstyle/content/watchwindows.jsm");
+  Cu.import("chrome://oldidentityblockstyle/content/hook.jsm");
   registerStyleSheet();
 
   watchWindows(addHandlers);
@@ -125,6 +141,7 @@ function shutdown(data, reason) {
   // Clean up with unloaders when we're deactivating
   if (reason != APP_SHUTDOWN) {
     unload();
+    Cu.unload("chrome://oldidentityblockstyle/content/hook.jsm");
     Cu.unload("chrome://oldidentityblockstyle/content/watchwindows.jsm");
   }
 }
