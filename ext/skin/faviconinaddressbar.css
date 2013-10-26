@@ -13,6 +13,7 @@
 }
 
 #identity-box {
+  font-size: 1em !important;
   background-image: -moz-linear-gradient(hsl(0,0%,98%), hsl(0,0%,92%));
   box-shadow: 0 1px 0 hsla(0,0%,0%,.05) inset;
   -moz-border-end: 1px solid hsla(0,0%,0%,.1);
