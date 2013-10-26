@@ -88,6 +88,17 @@
 #identity-box {
   -moz-margin-end: 3px !important;
 }
+
 #identity-box.verifiedDomain, #identity-box.verifiedIdentity {
-    padding-right: 0px !important;
+  padding-right: 2px !important;
+}
+
+#identity-icon-labels {
+  -moz-padding-end: 1px !important;
+}
+
+/* "Switch to tab" box: fudged to look right in Windows Classic, untested elsewhere. */
+#urlbar-display {
+  -moz-margin-start: 1px !important;
+  -moz-margin-end: 2px !important;
 }
