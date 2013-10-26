@@ -69,8 +69,7 @@
 
   box-shadow: 0 1px 0 hsla(92,81%,16%,.05) inset;
   -moz-border-end-color: hsla(92,81%,16%,.2);
-/*+  background-color: #fff;*/
-  color: hsl(92,100%,20%);
+  color: hsl(92,100%,20%) !important;
 }
 
 #identity-box.verifiedIdentity:hover {
