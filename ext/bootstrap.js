@@ -85,9 +85,30 @@ function addHandlers(window) {
     return ret;
   });
 
+  // Restore browser.identity.ssl_domain_display functionality for non-EV domains.
+  var hook_setIdentityMessages = hook(window.gIdentityHandler, "setIdentityMessages", function(newMode) {
+    var ret = hook_setIdentityMessages.target.apply(this, arguments);
+    if (newMode == this.IDENTITY_MODE_DOMAIN_VERIFIED) {
+      switch (window.gPrefService.getIntPref("browser.identity.ssl_domain_display")) {
+        case 2: // Show full domain
+          icon_label = this._lastLocation.hostname;
+          break;
+        case 1: // Show eTLD.
+          icon_label = this.getEffectiveHost();
+          break;
+        case 0:
+          icon_label = "";
+      }
+      this._identityIconLabel.value = icon_label;
+      this._identityIconLabel.parentNode.collapsed = icon_label ? false : true;
+    }
+    return ret;
+  });
+
   unload(function() {
     window.gBrowser.tabContainer.removeEventListener("TabSelect", onTabSelect);
     hook_SetPageProxyState.unhook();
+    hook_setIdentityMessages.unhook();
     hook_setIcon.unhook();
     PageProxyClearIcon();
   }, window);
@@ -123,6 +144,11 @@ function registerStyleSheet() {
   unload(function() sss.unregisterSheet(uri, sss.AGENT_SHEET));
 }
 
+function setDefaultPrefs() {
+  var branch = Services.prefs.getDefaultBranch("");
+  branch.setIntPref("browser.identity.ssl_domain_display", 1);
+}
+
 /**
  * Handle the extension being activated on install/enable
  */
@@ -130,6 +156,7 @@ function startup(data, reason) {
   Cu.import("chrome://oldidentityblockstyle/content/watchwindows.jsm");
   Cu.import("chrome://oldidentityblockstyle/content/hook.jsm");
   registerStyleSheet();
+  setDefaultPrefs();
 
   watchWindows(addHandlers);
 }
