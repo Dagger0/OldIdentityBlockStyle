@@ -53,19 +53,20 @@
 }
 
 #identity-box.verifiedDomain:hover {
-  background-image: -moz-linear-gradient(hsl(215,85%,85%), hsl(215,70%,68%));
+  background-image: -moz-linear-gradient(hsl(215,85%,85%), hsl(215,70%,75%));
 }
 
 #identity-box.verifiedDomain[open="true"],
 #identity-box.verifiedDomain:hover:active {
-  background-image: -moz-linear-gradient(hsl(215,80%,80%), hsl(215,67%,65%));
+  background-image: -moz-linear-gradient(hsl(215,80%,82%), hsl(215,67%,70%));
   box-shadow: 0 1px 1px hsla(215,54%,33%,.7) inset,
               0 1px 3px 1px hsla(215,54%,33%,.5) inset;
 }
 
 /* Green box for EV certs. */
 #identity-box.verifiedIdentity {
-  background-image: -moz-linear-gradient(hsl(91,70%,90%), hsl(93,60%,81%));
+  background: -moz-linear-gradient(hsl(91,70%,90%), hsl(93,60%,81%)) !important;
+
   box-shadow: 0 1px 0 hsla(92,81%,16%,.05) inset;
   -moz-border-end-color: hsla(92,81%,16%,.2);
 /*+  background-color: #fff;*/
@@ -73,12 +74,12 @@
 }
 
 #identity-box.verifiedIdentity:hover {
-  background-image: -moz-linear-gradient(hsl(92,69%,77%), hsl(92,44%,51%));
+  background-image: -moz-linear-gradient(hsl(92,69%,87%), hsl(92,44%,71%)) !important;
 }
 
 #identity-box.verifiedIdentity[open="true"],
 #identity-box.verifiedIdentity:hover:active {
-  background-image: -moz-linear-gradient(hsl(92,65%,70%), hsl(92,40%,48%));
+  background-image: -moz-linear-gradient(hsl(92,65%,80%), hsl(92,40%,58%)) !important;
   box-shadow: 0 1px 1px hsla(92,81%,16%,.6) inset,
               0 1px 3px 1px hsla(92,81%,16%,.5) inset;
 /*+  -moz-border-end: 1px solid hsla(92,81%,16%,.2);*/
