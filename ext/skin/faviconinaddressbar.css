@@ -1,3 +1,4 @@
+/* Set the favicon to the default when no icon is set (rather than the globe/padlock). */
 #page-proxy-favicon:not([src]) {
   list-style-image: url("chrome://mozapps/skin/places/defaultFavicon.png") !important;
   -moz-image-region: auto;
@@ -12,6 +13,7 @@
   -moz-image-region: auto !important;
 }
 
+/* Default gray box for non-SSL sites. */
 #identity-box {
   font-size: 1em !important;
   background-image: -moz-linear-gradient(hsl(0,0%,98%), hsl(0,0%,92%));
@@ -42,6 +44,7 @@
   background-repeat: repeat !important;
 }
 
+/* Blue box for non-EV certs. */
 #identity-box.verifiedDomain {
   background-image: -moz-linear-gradient(hsl(215,60%,92%), hsl(215,58%,88%));
   box-shadow: 0 1px 0 hsla(215,54%,33%,.05) inset;
@@ -60,6 +63,7 @@
               0 1px 3px 1px hsla(215,54%,33%,.5) inset;
 }
 
+/* Green box for EV certs. */
 #identity-box.verifiedIdentity {
   background-image: -moz-linear-gradient(hsl(91,70%,90%), hsl(93,60%,81%));
   box-shadow: 0 1px 0 hsla(92,81%,16%,.05) inset;
