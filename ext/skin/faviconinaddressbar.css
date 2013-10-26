@@ -3,12 +3,12 @@
   -moz-image-region: auto;
 }
 
-#identity-box:hover > #identity-box-inner > #page-proxy-stack > #page-proxy-favicon:not([src]) {
+#identity-box:hover > #page-proxy-favicon:not([src]) {
   -moz-image-region: auto !important;
 }
 
-#identity-box:hover:active > #identity-box-inner > #page-proxy-stack > #page-proxy-favicon:not([src]),
-#identity-box[open=true] > #identity-box-inner > #page-proxy-stack > #page-proxy-favicon:not([src]) {
+#identity-box:hover:active > #page-proxy-favicon:not([src]),
+#identity-box[open=true] > #page-proxy-favicon:not([src]) {
   -moz-image-region: auto !important;
 }
 
