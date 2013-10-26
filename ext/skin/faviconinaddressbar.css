@@ -102,3 +102,9 @@
   -moz-margin-start: 1px !important;
   -moz-margin-end: 2px !important;
 }
+
+/* Display the identity block even when pageproxystate="invalid" (without
+   this, the address leaps to the left when you start typing. */
+#urlbar[pageproxystate="invalid"] > #identity-box > #identity-icon-labels:not([collapsed="true"]) {
+  visibility: visible !important;
+}
