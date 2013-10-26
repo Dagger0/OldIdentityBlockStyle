@@ -29,7 +29,17 @@
               0 1px 3px hsla(0,0%,0%,.3) inset;
 }
 
+/* Gray box color for about: and chrome: URIs. */
+#identity-box.chromeUI {
+  background-image: -moz-linear-gradient(hsl(0,0%,98%), hsl(0,0%,92%)) !important;
+}
 
+/* Remove background image CSS from Fx theme that breaks our CSS. */
+#urlbar[pageproxystate="valid"] > #identity-box.chromeUI {
+  background-position: 0 0 !important;
+  background-size: auto auto !important;
+  background-repeat: repeat !important;
+}
 
 #identity-box.verifiedDomain {
   background-image: -moz-linear-gradient(hsl(215,60%,92%), hsl(215,58%,88%));
